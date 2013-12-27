@@ -69,8 +69,7 @@ OUT;
         $select = $session->getPage()->findField($selectName);
         $this->assertNotNull($select);
 
-        $optionValueEscaped = $session->getSelectorsHandler()->xpathLiteral($optionValue);
-        $option = $select->find('named', array('option', $optionValueEscaped));
+        $option = $select->find('named', array('option', $optionValue));
         $this->assertNotNull($option);
 
         $this->assertFalse($option->isSelected());

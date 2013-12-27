@@ -70,16 +70,6 @@ abstract class Element implements ElementInterface
     }
 
     /**
-     * Returns selectors handler.
-     *
-     * @return SelectorsHandler
-     */
-    protected function getSelectorsHandler()
-    {
-        return $this->selectorsHandler;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function has($selector, $locator)
@@ -144,7 +134,7 @@ abstract class Element implements ElementInterface
             return $items;
         }
 
-        $xpath = $this->getSelectorsHandler()->selectorToXpath($selector, $locator);
+        $xpath = $this->selectorsHandler->selectorToXpath($selector, $locator);
         $xpath = $this->xpathManipulator->prepend($xpath, $this->getXpath());
 
         return $this->getDriver()->find($xpath);
