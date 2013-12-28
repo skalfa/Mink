@@ -14,7 +14,6 @@ use Behat\Mink\Driver\DriverInterface;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Selector\SelectorsHandler;
 use Behat\Mink\Selector\Xpath\Manipulator;
-use Behat\Mink\Session;
 
 /**
  * Base element.
@@ -43,14 +42,14 @@ abstract class Element implements ElementInterface
     /**
      * Initialize element.
      *
-     * @param Session $session
+     * @param DriverInterface  $driver
+     * @param SelectorsHandler $selectorsHandler
      */
-    public function __construct(Session $session)
+    public function __construct(DriverInterface $driver, SelectorsHandler $selectorsHandler)
     {
         $this->xpathManipulator = new Manipulator();
-
-        $this->driver = $session->getDriver();
-        $this->selectorsHandler = $session->getSelectorsHandler();
+        $this->driver = $driver;
+        $this->selectorsHandler = $selectorsHandler;
     }
 
     /**
