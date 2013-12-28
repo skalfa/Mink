@@ -40,16 +40,23 @@ abstract class Element implements ElementInterface
     private $xpathManipulator;
 
     /**
+     * @var ElementFactory
+     */
+    private $elementFactory;
+
+    /**
      * Initialize element.
      *
      * @param DriverInterface  $driver
      * @param SelectorsHandler $selectorsHandler
+     * @param ElementFactory   $elementFactory
      */
-    public function __construct(DriverInterface $driver, SelectorsHandler $selectorsHandler)
+    public function __construct(DriverInterface $driver, SelectorsHandler $selectorsHandler, ElementFactory $elementFactory)
     {
         $this->xpathManipulator = new Manipulator();
         $this->driver = $driver;
         $this->selectorsHandler = $selectorsHandler;
+        $this->elementFactory = $elementFactory;
     }
 
     /**
@@ -110,7 +117,7 @@ abstract class Element implements ElementInterface
     {
         $items = $this->findAll($selector, $locator);
 
-        return count($items) ? current($items) : null;
+        return count($items) ? $items[0] : null;
     }
 
     /**
@@ -130,7 +137,13 @@ abstract class Element implements ElementInterface
         $xpath = $this->selectorsHandler->selectorToXpath($selector, $locator);
         $xpath = $this->xpathManipulator->prepend($xpath, $this->getXpath());
 
-        return $this->getDriver()->find($xpath);
+        $elements = array();
+
+        foreach ($this->getDriver()->find($xpath) as $elementXpath) {
+            $elements[] = $this->elementFactory->createNodeElement($elementXpath, $this->driver, $this->selectorsHandler);
+        }
+
+        return $elements;
     }
 
     /**
