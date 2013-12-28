@@ -10,8 +10,6 @@
 
 namespace Behat\Mink\Element;
 
-use Behat\Mink\Session;
-
 /**
  * Element interface.
  *

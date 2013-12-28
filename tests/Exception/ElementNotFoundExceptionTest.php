@@ -11,11 +11,9 @@ class ElementNotFoundExceptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildMessage($message, $type, $selector = null, $locator = null)
     {
-        $session = $this->getMockBuilder('Behat\Mink\Session')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $driver = $this->getMock('Behat\Mink\Driver\DriverInterface');
 
-        $exception = new ElementNotFoundException($session, $type, $selector, $locator);
+        $exception = new ElementNotFoundException($driver, $type, $selector, $locator);
 
         $this->assertEquals($message, $exception->getMessage());
     }

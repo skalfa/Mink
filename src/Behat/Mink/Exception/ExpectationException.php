@@ -10,7 +10,7 @@
 
 namespace Behat\Mink\Exception;
 
-use Behat\Mink\Session;
+use Behat\Mink\Driver\DriverInterface;
 
 /**
  * Exception thrown for failed expectations.
@@ -21,18 +21,18 @@ use Behat\Mink\Session;
  */
 class ExpectationException extends Exception
 {
-    private $session;
+    private $driver;
 
     /**
      * Initializes exception.
      *
-     * @param string     $message   optional message
-     * @param Session    $session   session instance
-     * @param \Exception $exception expectation exception
+     * @param string          $message   optional message
+     * @param DriverInterface $driver    driver instance
+     * @param \Exception      $exception expectation exception
      */
-    public function __construct($message, Session $session, \Exception $exception = null)
+    public function __construct($message, DriverInterface $driver, \Exception $exception = null)
     {
-        $this->session = $session;
+        $this->driver = $driver;
 
         if (!$message && null !== $exception) {
             $message = $exception->getMessage();
@@ -65,17 +65,17 @@ class ExpectationException extends Exception
      */
     protected function getContext()
     {
-        return $this->trimBody($this->getSession()->getPage()->getContent());
+        return $this->trimBody($this->driver->getContent());
     }
 
     /**
-     * Returns exception session.
+     * Returns driver.
      *
-     * @return Session
+     * @return DriverInterface
      */
-    protected function getSession()
+    protected function getDriver()
     {
-        return $this->session;
+        return $this->driver;
     }
 
     /**
@@ -130,15 +130,15 @@ class ExpectationException extends Exception
      */
     protected function getResponseInfo()
     {
-        $driver = basename(str_replace('\\', '/', get_class($this->session->getDriver())));
+        $driver = basename(str_replace('\\', '/', get_class($this->driver)));
 
         $info = '+--[ ';
         try {
-            $info .= 'HTTP/1.1 '.$this->session->getStatusCode().' | ';
+            $info .= 'HTTP/1.1 '.$this->driver->getStatusCode().' | ';
         } catch (UnsupportedDriverActionException $e) {
             // Ignore the status code when not supported
         }
-        $info .= $this->session->getCurrentUrl().' | '.$driver." ]\n|\n";
+        $info .= $this->driver->getCurrentUrl().' | '.$driver." ]\n|\n";
 
         return $info;
     }
