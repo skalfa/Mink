@@ -12,8 +12,6 @@ namespace Behat\Mink\Element;
 
 use Behat\Mink\Driver\DriverInterface;
 use Behat\Mink\Exception\ElementNotFoundException;
-use Behat\Mink\Selector\SelectorsHandler;
-use Behat\Mink\Selector\Xpath\Manipulator;
 
 /**
  * Base element.
@@ -30,33 +28,20 @@ abstract class Element implements ElementInterface
     private $driver;
 
     /**
-     * @var SelectorsHandler
+     * @var ElementFinder
      */
-    private $selectorsHandler;
-
-    /**
-     * @var Manipulator
-     */
-    private $xpathManipulator;
-
-    /**
-     * @var ElementFactory
-     */
-    private $elementFactory;
+    private $elementFinder;
 
     /**
      * Initialize element.
      *
      * @param DriverInterface  $driver
-     * @param SelectorsHandler $selectorsHandler
-     * @param ElementFactory   $elementFactory
+     * @param ElementFinder    $elementFinder
      */
-    public function __construct(DriverInterface $driver, SelectorsHandler $selectorsHandler, ElementFactory $elementFactory)
+    public function __construct(DriverInterface $driver, ElementFinder $elementFinder)
     {
-        $this->xpathManipulator = new Manipulator();
         $this->driver = $driver;
-        $this->selectorsHandler = $selectorsHandler;
-        $this->elementFactory = $elementFactory;
+        $this->elementFinder = $elementFinder;
     }
 
     /**
@@ -125,25 +110,7 @@ abstract class Element implements ElementInterface
      */
     public function findAll($selector, $locator)
     {
-        if ('named' === $selector) {
-            $items = $this->findAll('named_exact', $locator);
-            if (empty($items)) {
-                $items = $this->findAll('named_partial', $locator);
-            }
-
-            return $items;
-        }
-
-        $xpath = $this->selectorsHandler->selectorToXpath($selector, $locator);
-        $xpath = $this->xpathManipulator->prepend($xpath, $this->getXpath());
-
-        $elements = array();
-
-        foreach ($this->getDriver()->find($xpath) as $elementXpath) {
-            $elements[] = $this->elementFactory->createNodeElement($elementXpath, $this->driver, $this->selectorsHandler);
-        }
-
-        return $elements;
+        return $this->elementFinder->findAll($selector, $locator, $this->getXpath());
     }
 
     /**

@@ -12,7 +12,6 @@ namespace Behat\Mink\Element;
 
 use Behat\Mink\Driver\DriverInterface;
 use Behat\Mink\Exception\ElementNotFoundException;
-use Behat\Mink\Selector\SelectorsHandler;
 
 /**
  * Page element node.
@@ -28,14 +27,13 @@ class NodeElement extends TraversableElement
      *
      * @param string           $xpath element xpath
      * @param DriverInterface  $driver
-     * @param SelectorsHandler $selectorsHandler
-     * @param ElementFactory   $elementFactory
+     * @param ElementFinder    $elementFinder
      */
-    public function __construct($xpath, DriverInterface $driver, SelectorsHandler $selectorsHandler, ElementFactory $elementFactory)
+    public function __construct($xpath, DriverInterface $driver, ElementFinder $elementFinder)
     {
         $this->xpath = $xpath;
 
-        parent::__construct($driver, $selectorsHandler, $elementFactory);
+        parent::__construct($driver, $elementFinder);
     }
 
     /**
