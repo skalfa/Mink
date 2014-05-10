@@ -27,15 +27,6 @@ interface ElementInterface
     public function getXpath();
 
     /**
-     * Returns element's session.
-     *
-     * @return Session
-     *
-     * @deprecated Accessing the session from the element is deprecated as of 1.6 and will be impossible in 2.0.
-     */
-    public function getSession();
-
-    /**
      * Checks whether element with specified selector exists inside the current element.
      *
      * @param string       $selector selector engine name
