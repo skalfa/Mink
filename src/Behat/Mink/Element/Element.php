@@ -132,12 +132,23 @@ abstract class Element implements ElementInterface
         return $result;
     }
 
+
     /**
      * {@inheritdoc}
      */
-    public function find($selector, $locator)
+    public function find($selector, $locator, $onlyVisible = true)
     {
         $items = $this->findAll($selector, $locator);
+
+        if ($onlyVisible && count($items)) {
+            foreach($items as $item) {
+                if ($item->isVisible()) {
+                    return $item;
+                }
+            }
+
+            return null;
+        }
 
         return count($items) ? current($items) : null;
     }
