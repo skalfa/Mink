@@ -71,12 +71,13 @@ interface ElementInterface
      *
      * @param string       $selector selector engine name
      * @param string|array $locator  selector locator
+     * @param boolean $onlyVisible
      *
      * @return NodeElement|null
      *
      * @see ElementInterface::findAll for the supported selectors
      */
-    public function find($selector, $locator);
+    public function find($selector, $locator, $onlyVisible = true);
 
     /**
      * Finds all elements with specified selector inside the current element.
