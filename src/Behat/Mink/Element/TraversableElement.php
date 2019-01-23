@@ -78,6 +78,24 @@ abstract class TraversableElement extends Element
     }
 
     /**
+     * Hover link with specified locator.
+     *
+     * @param string $locator link id, title, text or image alt
+     *
+     * @throws ElementNotFoundException
+     */
+    public function hoverLink($locator)
+    {
+        $link = $this->findLink($locator);
+
+        if (null === $link) {
+            throw new ElementNotFoundException($this->getDriver(), 'link', 'id|title|alt|text', $locator);
+        }
+
+        $link->hover();
+    }
+
+    /**
      * Checks whether element has a button (input[type=submit|image|button|reset], button) with specified locator.
      *
      * @param string $locator button id, value or alt
