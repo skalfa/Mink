@@ -89,10 +89,10 @@ abstract class TraversableElement extends Element
         $link = $this->findLink($locator);
 
         if (null === $link) {
-            throw new ElementNotFoundException($this->getDriver(), 'link', 'id|title|alt|text', $locator);
+            throw $this->elementNotFound('link', 'id|title|alt|text', $locator);
         }
 
-        $link->hover();
+        $link->mouseOver();
     }
 
     /**
